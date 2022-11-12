@@ -34,6 +34,8 @@ def after_start():
     print("Variables.dictionary_of_content = " + str(Variables.dictionary_of_content))
     print("Variables.list_of_content_data = " + str(Variables.list_of_content_data))
     # Выгрузили содержимое контент.тхт в список и словарь...
+    # Выгрузили содержимое data.pickle в список и словарь...
+
 
 
 app = Flask(__name__)
@@ -47,9 +49,15 @@ def set_info():
         incoming_list = list(data.split(','))
         for lis in incoming_list:
             if lis not in Variables.list_of_content_data: Variables.list_of_content_data.append(lis)
+        for lis in Variables.list_of_content_data:
+            val = Variables.list_of_content_data.index(lis)
+            try:
+                if lis not in incoming_list: del Variables.list_of_content_data[val]
+            except:
+               pass
         for lis in incoming_list:
             if lis not in Variables.list_of_content_txt: Variables.list_of_content_txt.append(lis)
-        print(Variables.list_of_content_data)
+        print(str(incoming_list) + "  " + str(Variables.list_of_content_data))
 
         with open('data/data.pickle', 'wb') as f:
             pickle.dump(Variables.list_of_content_data, f)
