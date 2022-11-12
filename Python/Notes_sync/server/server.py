@@ -43,28 +43,11 @@ app = Flask(__name__)
 
 @app.route("/data_set", methods=['GET', ])
 def set_info():
-
     data = request.args.get('data')  # Получаем значение ID из запроса
-    if data != '':
-        incoming_list = list(data.split(','))
-        for lis in incoming_list:
-            if lis not in Variables.list_of_content_data: Variables.list_of_content_data.append(lis)
-        for lis in Variables.list_of_content_data:
-            val = Variables.list_of_content_data.index(lis)
-            try:
-                if lis not in incoming_list: del Variables.list_of_content_data[val]
-            except:
-               pass
-        for lis in incoming_list:
-            if lis not in Variables.list_of_content_txt: Variables.list_of_content_txt.append(lis)
-        print(str(incoming_list) + "  " + str(Variables.list_of_content_data))
-
-        with open('data/data.pickle', 'wb') as f:
-            pickle.dump(Variables.list_of_content_data, f)
-    else:
-        Variables.list_of_content_data = []
-        with open('data/data.pickle', 'wb') as f:
-            pickle.dump(Variables.list_of_content_data, f)
+    Variables.list_of_content_data = list(data.split(','))
+    with open('data/data.pickle', 'wb') as f:
+        pickle.dump(Variables.list_of_content_data, f)
+    print(str(Variables.list_of_content_data))
     return "Ok!"
 
 
