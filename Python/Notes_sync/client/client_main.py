@@ -20,24 +20,28 @@ def on_start():
     else:
         with open('data_file.txt', "w"):
             pass
+    load_settings()
     check_entry()
+
+def load_settings():
+    with open("settings.txt", "r", encoding="UTF8") as setings:
+        lines = setings.split(';')
+
 
 
 def check_entry():
-
-        value_entry = str(entry.get("1.0", END))
-        if value_entry == text_file_value + "\n":
-            pass
-        else:
-            try:
-                if os.path.exists('data_file.txt'):
-                    with open('data_file.txt', 'w') as f:
-                        f.write(entry.get("1.0", END))
-            except:
-                sys.exit()
-        print(value_entry)
-        root.after(2000, check_entry)
-
+    value_entry = str(entry.get("1.0", END))
+    if value_entry == text_file_value + "\n":
+        pass
+    else:
+        try:
+            if os.path.exists('data_file.txt'):
+                with open('data_file.txt', 'w') as f:
+                    f.write(entry.get("1.0", END))
+        except:
+            sys.exit()
+    print(value_entry)
+    root.after(2000, check_entry)
 
 
 root = Tk()
