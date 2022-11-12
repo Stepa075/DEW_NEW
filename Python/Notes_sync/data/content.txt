@@ -1,3 +1,0 @@
-getdatetime = request.args.get('datetime')
-sendid = request.args.get('id')
-getdata = request.args.get('data')
