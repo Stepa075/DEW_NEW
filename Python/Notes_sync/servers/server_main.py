@@ -37,7 +37,6 @@ def after_start():
     # Выгрузили содержимое data.pickle в список и словарь...
 
 
-
 app = Flask(__name__)
 
 
@@ -53,7 +52,7 @@ def set_info():
 
 @app.route("/data_get", methods=['GET', ])
 def getinfo_from_file():
-    return "".join(Variables.list_of_content_data)
+    return ",".join(Variables.list_of_content_data)
 
 
 if __name__ == "__main__":
