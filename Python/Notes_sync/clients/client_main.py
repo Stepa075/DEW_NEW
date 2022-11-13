@@ -1,9 +1,8 @@
 import os
 import sys
 from threading import Thread
-from tkinter import END, LabelFrame, Text, BOTH
-from tkinter import Tk
-from tkinter.ttk import Frame
+from tkinter import *
+from tkinter.ttk import *
 
 import requests
 
@@ -27,7 +26,7 @@ def on_start():
     if os.path.exists('my_data.txt'):
         with open('my_data.txt', "r") as f:
             for line in f.readlines():
-                entry1.insert(END, line)
+                entry2.insert(END, line)
     else:
         with open('my_data.txt', "w"):
             pass
@@ -64,14 +63,32 @@ def check_entry():
                 print("in check entry else ;  " + str(Variables.list_of_set_data))
         except:
             sys.exit()
+    check_changes_on_server()
     root.after(2000, check_entry)
 
 
 def check_my_entry():
     if os.path.exists('my_data.txt'):
         with open('my_data.txt', 'w') as f:
-            f.write(entry1.get("1.0", END))
+            f.write(entry2.get("1.0", END))
     root.after(5000, check_my_entry)
+
+
+def check_changes_on_server():
+    if Variables.code_of_response_server == 200:
+        server_data = Variables.list_of_get_data
+        local_data = ','.join((str(entry1.get("1.0", END))).split())
+        print(server_data)
+        print(local_data)
+        if server_data == local_data:
+            pass
+        else:
+            entry1.delete(1.0, END)
+            b = Variables.list_of_get_data.split(',')
+            for element in b:
+                entry1.insert(END, element + '\n')
+    else:
+        pass
 
 
 def set_data():
@@ -86,26 +103,39 @@ def set_data():
         print("EXcept of set data!!!")
         pass
 
+def view_my_notes(event):
+    t = Toplevel()
+    t.wm_title("My notes")
+    l = Text(t, font=("Arial Bold", 12))
+    l.pack(side="top", fill="both", expand=True, padx=5, pady=5)
+    aaa = entry2.get(1.0, END)
+    l.insert(1.0, aaa)
+
+
 
 root = Tk()
-
-root.title("My notes")
+root.iconphoto(True, PhotoImage(file='icon.png'))
+root.title("My notes sync LAN")
 root.geometry('300x155-0-40')
 root.resizable(True, True)
-root.minsize(300, 100)
 
 f_top = Frame(root)
 f_bot = Frame(root)
+f_my = Frame(root)
 f_top.pack(fill=BOTH, expand=True)
 f_bot.pack(fill=BOTH, expand=True)
-entry = Text(f_top, font=("Arial Bold", 12), height=4, )
+f_my.pack(fill=BOTH, expand=True)
+entry = Text(f_top, font=("Arial Bold", 12), height=2)
 entry.pack(fill=BOTH, expand=True)
 entry1 = Text(f_bot, font=("Arial Bold", 12), height=4)
 entry1.pack(fill=BOTH, expand=True)
+entry2 = Text(f_bot, font=("Arial Bold", 12), height=2)
+entry2.bind('<Button-3>', view_my_notes)
+entry2.pack(fill=BOTH, expand=True)
 
 th1 = Thread(target=streams.get_data, daemon=True)
 th1.start()
 root.after(0, on_start)
-
 root.after(0, check_my_entry)
+
 root.mainloop()

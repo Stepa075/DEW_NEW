@@ -37,6 +37,14 @@ def after_start():
     # Выгрузили содержимое data.pickle в список и словарь...
 
 
+def load_settings():
+    with open("settings.txt", "r", encoding="UTF8") as setings:
+        f = setings.read()
+        lines = f.split(';')
+        Variables.host = lines[0]
+        Variables.port = int(lines[1])
+
+
 app = Flask(__name__)
 
 
@@ -56,5 +64,6 @@ def getinfo_from_file():
 
 
 if __name__ == "__main__":
+    load_settings()
     after_start()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host=Variables.host, port=Variables.port, debug=True)
