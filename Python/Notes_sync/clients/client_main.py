@@ -58,6 +58,7 @@ def general_title_state():
 
 def write_server_data_to_entry():
     b = Variables.list_of_get_data
+    entry1.delete(1.0, END)
     for element in b:
         entry1.insert(1.0, element + '\n')
 
@@ -69,6 +70,33 @@ def write_local_data():
         pickle.dump(Variables.list_of_saved_data, f)
     root.after(2000, write_local_data)
 
+def set_data():
+    try:
+        mystring = ','.join(Variables.list_of_saved_data)
+        url = ("http://" + str(Variables.ip) + "/data_set?data=" + mystring)
+        r = requests.get(url, timeout=3.00)
+        r.encoding = "UTF8"
+        if r.status_code == 200:
+            print("set_data " + mystring)
+    except:
+        print("EXcept of set data!!!")
+        pass
+
+def getClipboardText(event):
+    from tkinter import Tk
+    root = Tk()
+    root.withdraw()
+    s = root.clipboard_get()
+    entry.insert(1.0, s)
+
+
+def view_my_notes(event):
+    t = Toplevel()
+    t.wm_title("My notes")
+    l = Text(t, font=("Arial Bold", 12))
+    l.pack(side="top", fill="both", expand=True, padx=5, pady=5)
+    aaa = entry2.get(1.0, END)
+    l.insert(1.0, aaa)
 
 # def check_entry():
 #     val = ''.join((str(entry.get("1.0", END))).split())
@@ -116,26 +144,6 @@ def write_local_data():
 #         pass
 
 
-def set_data():
-    try:
-        mystring = ','.join(Variables.list_of_set_data)
-        url = ("http://" + str(Variables.ip) + "/data_set?data=" + mystring)
-        r = requests.get(url, timeout=3.00)
-        r.encoding = "UTF8"
-        if r.status_code == 200:
-            print("set_data " + mystring)
-    except:
-        print("EXcept of set data!!!")
-        pass
-
-
-def view_my_notes(event):
-    t = Toplevel()
-    t.wm_title("My notes")
-    l = Text(t, font=("Arial Bold", 12))
-    l.pack(side="top", fill="both", expand=True, padx=5, pady=5)
-    aaa = entry2.get(1.0, END)
-    l.insert(1.0, aaa)
 
 
 root = Tk()
@@ -151,8 +159,9 @@ f_top.pack(fill=BOTH, expand=True)
 f_bot.pack(fill=BOTH, expand=True)
 f_my.pack(fill=BOTH, expand=True)
 entry = Text(f_top, font=("Arial Bold", 12), height=2, width=27)
+entry.bind('<Button-3>', getClipboardText)
 entry.pack(fill=X, expand=True)
-button = Button(f_top, text="Send", width=2)
+button = Button(f_top, text="Send", width=2, command=set_data)
 button.pack(fill=X,  expand=True)
 entry1 = Text(f_bot, font=("Arial Bold", 12), height=4)
 entry1.pack(fill=BOTH, expand=True)
