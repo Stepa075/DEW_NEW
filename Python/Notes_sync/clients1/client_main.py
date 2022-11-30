@@ -29,6 +29,7 @@ def on_start():
                 data_new = []
                 pass
         Variables.list_of_saved_data = data_new
+        entry.delete(1.0, END)
         for element in Variables.list_of_saved_data:
             entry.insert(1.0, element + '\n')
         print(Variables.list_of_saved_data)
@@ -43,7 +44,7 @@ def general_title_state():
         Variables.root_title = "My notes sync LAN (connected)"
         root.title(Variables.root_title)
         val = list((entry1.get(1.0, END)).split())
-        val.reverse()
+        # val.reverse()
         print("value = " + str(val))
         if Variables.list_of_get_data != val:
             write_server_data_to_entry()
@@ -75,9 +76,10 @@ def write_local_data():
 def set_data():
     try:
         dict = {}
-        lis = list((entry.get(1.0, END)).split())
+        lis = list((entry.get(1.0, END)).split('\n'))
+        if lis[-1] == '\n' or lis[-1] == '':
+            del lis[-1]
         for index, val in enumerate(lis):
-            # dictionary = dict.fromkeys(str(index), val)
             dict[index] = val
         print(dict)
         r = requests.get("http://127.0.0.1:5000/data_json_set", json=(dict))
