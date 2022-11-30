@@ -1,3 +1,4 @@
+import json
 import os
 import pickle
 import sys
@@ -73,26 +74,15 @@ def write_local_data():
 
 def set_data():
     try:
-        r4_0 = Variables.parsing_GPIO_4relay1
-        r4_1 = str(Variables.r1)
-        r4_2 = str(Variables.r2)
-        r4_3 = str(Variables.r3)
-        r4_4 = str(Variables.r4)
-        params = {'params': str(Variables.parsing_ESP1),
-                  'params1': str(Variables.Sadok_Light1),
-                  'params2_1': r4_1,
-                  'params2_2': r4_2,
-                  'params2_3': r4_3,
-                  'params2_4': r4_4, 'control': 'home'}
-        print(params)
-        r = requests.get('http://f0555107.xsph.ru/index.php', params=params, timeout=3.0)
-
-        mystring = ','.join(Variables.list_of_saved_data)
-        url = ("http://" + str(Variables.ip) + "/data_set?data=" + mystring)
-        r = requests.get(url, timeout=3.00)
-        r.encoding = "UTF8"
+        dict = {}
+        lis = list((entry.get(1.0, END)).split())
+        for index, val in enumerate(lis):
+            # dictionary = dict.fromkeys(str(index), val)
+            dict[index] = val
+        print(dict)
+        r = requests.get("http://127.0.0.1:5000/data_json_set", json=(dict))
         if r.status_code == 200:
-            print("set_data " + mystring)
+            print("set_data " + str(lis))
     except:
         print("EXcept of set data!!!")
         pass

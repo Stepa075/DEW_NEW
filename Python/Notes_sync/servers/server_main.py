@@ -64,18 +64,20 @@ def getinfo_from_file():
     return ",".join(Variables.list_of_content_data)
 
 
-@app.route("/data_json_set", methods=['GET', ])
-def set_info():
-    data = request.args.get('data')  # Получаем значение ID из запроса
-    Variables.list_of_content_data = list(data.split(','))
-    with open('data/data.pickle', 'wb') as f:
-        pickle.dump(Variables.list_of_content_data, f)
-    print(str(Variables.list_of_content_data))
+@app.route("/data_json_set", methods=['GET', 'POST'])
+def set_json_info():
+    data = request.get_json()  # Получаем значение  из запроса
+    # rec = json.loads(data)
+    # Variables.list_of_content_data = list(data.split(','))
+    # with open('data/data.pickle', 'wb') as f:
+    #     pickle.dump(Variables.list_of_content_data, f)
+    # print(str(Variables.list_of_content_data))
+    print(data)
     return "Ok!"
 
 
 @app.route("/data_json_get", methods=['GET', ])
-def getinfo_from_file():
+def getinfo_from_file_json():
     return ",".join(Variables.list_of_content_data)
 
 
