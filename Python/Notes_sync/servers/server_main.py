@@ -3,6 +3,7 @@ import pickle
 
 from flask import Flask
 from flask import request
+import json
 
 import Variables
 
@@ -59,6 +60,21 @@ def set_info():
 
 
 @app.route("/data_get", methods=['GET', ])
+def getinfo_from_file():
+    return ",".join(Variables.list_of_content_data)
+
+
+@app.route("/data_json_set", methods=['GET', ])
+def set_info():
+    data = request.args.get('data')  # Получаем значение ID из запроса
+    Variables.list_of_content_data = list(data.split(','))
+    with open('data/data.pickle', 'wb') as f:
+        pickle.dump(Variables.list_of_content_data, f)
+    print(str(Variables.list_of_content_data))
+    return "Ok!"
+
+
+@app.route("/data_json_get", methods=['GET', ])
 def getinfo_from_file():
     return ",".join(Variables.list_of_content_data)
 
