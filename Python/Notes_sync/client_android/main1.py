@@ -68,13 +68,6 @@ class ClientApp(App):
     def build(self):
         root = BoxLayout(orientation="vertical", padding=1)
 
-        # self.sam_primer = TextInput(
-        #     text="one field", readonly=True, font_size=60,
-        #     size_hint=[.70, .33], background_color=[1, 1, 1, .8], halign="center")
-        #
-        # self.ravno = TextInput(
-        #     text="=", readonly=True, font_size=60,
-        #     size_hint=[.05, .33], background_color=[1, 1, 1, .8], halign="center")
 
         self.input_text = TextInput(
             text="", readonly=False, font_size=60,
