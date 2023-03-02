@@ -8,8 +8,7 @@ from tkinter.filedialog import askopenfilenames
 import Functions
 import Streams
 import Variables
-
-
+import MainServer
 def exit():
     Functions.logging_session("Session Logging Out. Exit program", 'bin/logging/' + str(Variables.date_current) + '_session.txt')
     root.destroy()

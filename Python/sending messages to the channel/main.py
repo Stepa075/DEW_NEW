@@ -15,6 +15,7 @@ def send_telegram(text: str):
 
     if r.status_code != 200:
         raise Exception("post_text error")
+        pass
 
 
 if __name__ == '__main__':
